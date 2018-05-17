@@ -9,10 +9,23 @@ namespace server {
 
 class server {
 public:
-    server(boost::asio::io_service& io_service) : acceptor_(io_service) {}
+    server(boost::asio::io_service& io_service, int port) : acceptor_(io_service, tcp::endpoint(tcp::v4(), port)) {}
     ~server() {}
+    void start() {
+        auto new_connection = connection::create(acceptor_.get_executor().context());
+        acceptor_.async_accept(new_connection->socket(), std::bind(&server::accept_handler, this, new_connection, std::placeholders::_1));
+    }
 
 private:
+    void accept_handler(std::shared_ptr<tcp_connection> new_connection, const boost::system::error_code& error) {
+        if (error) {
+             std::cout << error << '\n';
+         } else {
+             new_connection->read();
+        }
+        start();
+    }
+
     tcp::acceptor acceptor_;
 
 };
