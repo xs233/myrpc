@@ -19,9 +19,9 @@ public:
 private:
     void accept_handler(std::shared_ptr<tcp_connection> new_connection, const boost::system::error_code& error) {
         if (error) {
-             std::cout << error << '\n';
+            throw boost::system::system_error(error);
          } else {
-             new_connection->read();
+            new_connection->read();
         }
         start();
     }

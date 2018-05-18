@@ -35,7 +35,7 @@ public:
                 }
             }
             // TODO: parse
-
+            
         }
     }
 
@@ -51,7 +51,7 @@ private:
         unsigned char* data;
         std::size_t vernier;
 
-    }
+    };
 
     std::size_t header_len_;
     boost::asio::ip::tcp::socket socket_;
